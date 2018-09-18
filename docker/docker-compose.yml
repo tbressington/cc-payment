@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+    crowdcube:
+        build: ./web
+        volumes:
+          - ~/Documents/DEV/crowdcube:/usr/local/crowdcube
+          - db_crowdcube_data:/var/lib/mysql
+        ports:
+          - '80:80'
+          - '3306:3306'
+        restart: always
+        tty: true
+
+volumes:
+  db_crowdcube_data:
