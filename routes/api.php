@@ -13,4 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/test', 'APIController@test');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/test', 'APIController@test');
+
+});

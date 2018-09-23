@@ -8,6 +8,8 @@ class APIController extends Controller
 {
     public function test()
     {
-        echo 'Test';
+        return response()->json([
+            'name' => 'tim'
+        ]);
     }
 }
