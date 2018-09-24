@@ -16,5 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/test', 'APIController@test');
+    Route::get('/makePayment', 'APIController@makePayment');
 
 });
