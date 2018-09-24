@@ -52,6 +52,14 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'error' => 'Resource not found'
             ], 404);
+        } else {
+            $message = $exception->getMessage(); // $exception->getMessage()
+            if ( empty($message) || !is_string($message) ) {
+                $message = 'An unknown error has occurred. Please try again';
+            }
+            return response()->json([
+                'error' => $message
+            ], 500);
         }
         
         return parent::render($request, $exception);
