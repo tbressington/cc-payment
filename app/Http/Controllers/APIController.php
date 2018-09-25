@@ -3,49 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \Stripe\Stripe;
+use App\Repositories\PaymentGateway\PaymentGatewayRepository;
 
 class APIController extends Controller
 {
-    public function test()
+    protected $payment_gateway;
+
+    public function __construct(PaymentGatewayRepository $payment_gateway)
     {
-        return response()->json([
-            'name' => 'tim'
-        ]);
+        $this->payment_gateway = $payment_gateway;
     }
 
-    public function makePayment()
+    public function createPayment(Request $request)
     {
-        // Test card details
-        //   Card No:   4000000000000077
-        //   Card Type: Mastercard (debit)
-        
-        Stripe::setApiKey(config('payment.api_keys.stripe'));
-
-        try {
-            $token = \Stripe\Token::create(array(
-                'card' => array(
-                    'number'    => '4000000000000077', // 4000000000009995 -> insufficient funds
-                    'exp_month' => '01',
-                    'exp_year'  => '2019',
-                    'cvc'       => '123',
-                    'name'      => 'John Doe'
-                )
-            ));
-        } catch (\Exception $e) {
-            abort('500');
-        }
-
-        if (!isset($token->id)) {
-            abort('404', 'Token not found');
-        }
-
-        $charge = \Stripe\Charge::create([
-            'amount' => 1099,
-            'currency' => 'gbp',
-            'description' => 'Test payment',
-            'source' => $token->id
+        $validated_data = $request->validate([
+            'card_number'    => 'required',
+            'card_exp_month' => 'required|dateformat:m',
+            'card_exp_year'  => 'required|dateformat:Y',
+            'card_cvc'       => 'required|numeric',
+            'customer_name'  => 'required|string',
+            'tx_amount'      => 'required|numeric',
+            'tx_currency'    => 'string',
+            'tx_description' => 'required|string',
         ]);
+        
+        $charge = $this->payment_gateway->createPayment($request);
 
         dd($charge);
     }
