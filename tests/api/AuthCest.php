@@ -1,6 +1,5 @@
 <?php
 
-
 class AuthCest
 {
     public function _before(ApiTester $I)
@@ -14,7 +13,7 @@ class AuthCest
     public function testAuthFailWithoutToken(ApiTester $I)
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
-        $I->sendGET('/test');
+        $I->sendGET('/');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED); // 401
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(['error' => 'Authentication has failed']);
@@ -24,7 +23,7 @@ class AuthCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->haveHttpHeader('token', 'wrongtoken');
-        $I->sendGET('/test');
+        $I->sendGET('/');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED); // 401
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(['error' => 'Authentication has failed']);
@@ -34,9 +33,9 @@ class AuthCest
     {
         $I->haveHttpHeader('Content-Type', 'application/json');
         $I->haveHttpHeader('token', 'Qr7kK2qy1ICnlTO74RK4BtvCvCXOCVnRciYwqrN2YBqGoiHbgNWD35r9elf4');
-        $I->sendGET('/test');
+        $I->sendGET('/');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(['name' => 'tim']);
+        $I->seeResponseContainsJson(['welcome' => 'api']);
     }
 }

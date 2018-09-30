@@ -52,8 +52,12 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'error' => 'Resource not found'
             ], 404);
+        } elseif ($exception->getStatusCode() == 405) {
+            return response()->json([
+                'error' => 'Method not allowed'
+            ], 405);
         } else {
-            $message = $exception->getMessage(); // $exception->getMessage()
+            $message = $exception->getMessage();
             if ( empty($message) || !is_string($message) ) {
                 $message = 'An unknown error has occurred. Please try again';
             }

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/', 'APIController@index');
     Route::post('/createPayment', 'APIController@createPayment');
 
 });
